@@ -18,8 +18,12 @@ seedDatabase({ autoOnly: true }).catch(err => {
 const app = express();
 
 // Middlewares
+const allowedOrigins = process.env.CLIENT_URL 
+  ? [process.env.CLIENT_URL, 'https://client-trav.vercel.app', 'http://localhost:5173', 'http://localhost:3000']
+  : '*';
+
 app.use(cors({
-  origin: '*', // For development. Can be restricted to specific hosts in production.
+  origin: allowedOrigins,
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization']
 }));
@@ -50,8 +54,11 @@ app.use((err, req, res, next) => {
   });
 });
 
-const PORT = process.env.PORT || 5000;
+const rawPort = process.env.PORT;
+const parsedPort = parseInt(rawPort, 10);
+const PORT = (!isNaN(parsedPort) && parsedPort > 0) ? parsedPort : 5000;
 
 app.listen(PORT, () => {
   console.log(`Server running in ${process.env.NODE_ENV || 'development'} mode on port ${PORT}`);
 });
+
