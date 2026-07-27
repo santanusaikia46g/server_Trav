@@ -8,8 +8,8 @@ const { protect } = require('../middleware/auth');
 // @access  Public
 router.get('/', async (req, res) => {
   try {
-    const { destination, maxPrice, duration, search } = req.query;
-    const packages = await Package.find({ destination, maxPrice, duration, search });
+    const { destination, category, maxPrice, duration, search } = req.query;
+    const packages = await Package.find({ destination, category, maxPrice, duration, search });
     res.json(packages);
   } catch (error) {
     res.status(500).json({ message: 'Server error fetching packages', error: error.message });
@@ -35,7 +35,7 @@ router.get('/:id', async (req, res) => {
 // @desc    Create a new package
 // @access  Private
 router.post('/', protect, async (req, res) => {
-  const { title, description, price, duration, destination, images, itinerary, included, excluded } = req.body;
+  const { title, description, price, duration, destination, category, images, itinerary, included, excluded } = req.body;
 
   if (!title || !description || !price || !duration || !destination) {
     return res.status(400).json({ message: 'Please fill in all required fields' });
@@ -48,6 +48,7 @@ router.post('/', protect, async (req, res) => {
       price,
       duration,
       destination,
+      category: category || 'Standard',
       images: images || [],
       itinerary: itinerary || [],
       included: included || [],

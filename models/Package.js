@@ -6,6 +6,7 @@ const mapPackage = (data) => {
     ...data,
     _id: data.id,
     price: Number(data.price),
+    category: data.category || 'Standard',
     images: Array.isArray(data.images) ? data.images : [],
     itinerary: Array.isArray(data.itinerary) ? data.itinerary : [],
     included: Array.isArray(data.included) ? data.included : [],
@@ -17,7 +18,7 @@ const Package = {
   async find(filters = {}) {
     let req = supabase.from('packages').select('*');
 
-    const { search, destination, maxPrice, duration } = filters;
+    const { search, destination, category, maxPrice, duration } = filters;
 
     if (search) {
       const term = `%${search}%`;
@@ -26,6 +27,10 @@ const Package = {
 
     if (destination) {
       req = req.ilike('destination', `%${destination}%`);
+    }
+
+    if (category) {
+      req = req.eq('category', category);
     }
 
     if (maxPrice) {
@@ -60,7 +65,7 @@ const Package = {
   },
 
   async create(packageData) {
-    const { title, description, price, duration, destination, images, itinerary, included, excluded } = packageData;
+    const { title, description, price, duration, destination, category, images, itinerary, included, excluded } = packageData;
 
     const insertObj = {
       title,
@@ -73,6 +78,9 @@ const Package = {
       included: included || [],
       excluded: excluded || []
     };
+    if (category) {
+      insertObj.category = category;
+    }
 
     const { data, error } = await supabase
       .from('packages')
@@ -93,6 +101,7 @@ const Package = {
     if (updateData.price !== undefined) payload.price = Number(updateData.price);
     if (updateData.duration !== undefined) payload.duration = updateData.duration;
     if (updateData.destination !== undefined) payload.destination = updateData.destination;
+    if (updateData.category !== undefined) payload.category = updateData.category;
     if (updateData.images !== undefined) payload.images = updateData.images;
     if (updateData.itinerary !== undefined) payload.itinerary = updateData.itinerary;
     if (updateData.included !== undefined) payload.included = updateData.included;

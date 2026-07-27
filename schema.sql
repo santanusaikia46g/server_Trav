@@ -26,6 +26,7 @@ CREATE TABLE IF NOT EXISTS public.packages (
   price NUMERIC NOT NULL,
   duration TEXT NOT NULL,
   destination TEXT NOT NULL,
+  category TEXT DEFAULT 'Standard' CHECK (category IN ('Standard', 'Deluxe', 'Luxury')),
   images JSONB DEFAULT '[]'::jsonb,
   itinerary JSONB DEFAULT '[]'::jsonb,
   included JSONB DEFAULT '[]'::jsonb,
