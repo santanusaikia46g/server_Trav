@@ -9,6 +9,8 @@ const adminRoutes = require('./routes/adminRoutes');
 const packageRoutes = require('./routes/packageRoutes');
 const destinationRoutes = require('./routes/destinationRoutes');
 const inquiryRoutes = require('./routes/inquiryRoutes');
+const reviewRoutes = require('./routes/reviewRoutes');
+const activityRoutes = require('./routes/activityRoutes');
 
 // Auto-seed database if tables are empty
 seedDatabase({ autoOnly: true }).catch(err => {
@@ -34,6 +36,8 @@ app.use('/api/admin', adminRoutes);
 app.use('/api/packages', packageRoutes);
 app.use('/api/destinations', destinationRoutes);
 app.use('/api/inquiry', inquiryRoutes);
+app.use('/api/reviews', reviewRoutes);
+app.use('/api/activity', activityRoutes);
 
 // Simple root check
 app.get('/', (req, res) => {

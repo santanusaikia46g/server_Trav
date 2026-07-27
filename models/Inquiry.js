@@ -16,6 +16,10 @@ const mapInquiry = (data) => {
     ...data,
     _id: data.id,
     packageId: populatedPackage || data.package_id || null,
+    status: data.status || 'Pending',
+    paymentStatus: data.payment_status || 'Pending',
+    amountPaid: data.amount_paid ? Number(data.amount_paid) : 0,
+    notes: data.notes || '',
     createdAt: data.created_at || data.createdAt
   };
 };
@@ -28,7 +32,9 @@ const Inquiry = {
       phone,
       package_id: packageId || null,
       message,
-      status: 'Pending'
+      status: 'Pending',
+      payment_status: 'Pending',
+      amount_paid: 0
     };
 
     const { data, error } = await supabase
@@ -65,6 +71,9 @@ const Inquiry = {
   async findByIdAndUpdate(id, updateData) {
     const payload = {};
     if (updateData.status !== undefined) payload.status = updateData.status;
+    if (updateData.paymentStatus !== undefined) payload.payment_status = updateData.paymentStatus;
+    if (updateData.amountPaid !== undefined) payload.amount_paid = Number(updateData.amountPaid);
+    if (updateData.notes !== undefined) payload.notes = updateData.notes;
 
     const { data, error } = await supabase
       .from('inquiries')

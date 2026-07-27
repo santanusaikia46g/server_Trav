@@ -44,19 +44,15 @@ router.get('/', protect, async (req, res) => {
 });
 
 // @route   PUT /api/inquiry/:id
-// @desc    Update status of an inquiry
+// @desc    Update status, payment status, or notes of an inquiry
 // @access  Private
 router.put('/:id', protect, async (req, res) => {
-  const { status } = req.body;
-
-  if (!status || !['Pending', 'Contacted', 'Resolved'].includes(status)) {
-    return res.status(400).json({ message: 'Invalid status' });
-  }
+  const { status, paymentStatus, amountPaid, notes } = req.body;
 
   try {
     const inquiry = await Inquiry.findByIdAndUpdate(
       req.params.id,
-      { status }
+      { status, paymentStatus, amountPaid, notes }
     );
 
     if (!inquiry) {
