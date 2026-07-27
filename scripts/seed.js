@@ -50,10 +50,10 @@ const packagesData = [
       'https://images.unsplash.com/photo-1519046904884-53103b34b206?auto=format&fit=crop&w=800&q=80'
     ],
     itinerary: [
-      { day: 1, title: 'Arrival & Beach Evening', description: 'Arrive at Goa Airport/Railway station. Transfer to hotel. In the evening, visit Calangute Beach and enjoy a beautiful sunset.', image: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=600&q=80' },
-      { day: 2, title: 'North Goa Sightseeing', description: 'Explore Fort Aguada, Sinquerim Beach, Anjuna Beach, and Vagator Beach. Experience Goa\'s active nightlife.', image: 'https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?auto=format&fit=crop&w=600&q=80' },
-      { day: 3, title: 'South Goa Culture & Cruise', description: 'Visit Basilica of Bom Jesus, Se Cathedral, Mangueshi Temple, and Miramar Beach. End the day with a Mandovi River boat cruise.', image: 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?auto=format&fit=crop&w=600&q=80' },
-      { day: 4, title: 'Departure', description: 'Spend some time shopping for local spices and handicrafts. Transfer to airport/station for departure.', image: 'https://images.unsplash.com/photo-1519046904884-53103b34b206?auto=format&fit=crop&w=600&q=80' }
+      { day: 1, title: 'Arrival & Beach Evening', description: 'Arrive at Goa Airport/Railway station. Transfer to hotel. In the evening, visit Calangute Beach and enjoy a beautiful sunset.', images: ['https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=600&q=80', 'https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?auto=format&fit=crop&w=600&q=80'] },
+      { day: 2, title: 'North Goa Sightseeing', description: 'Explore Fort Aguada, Sinquerim Beach, Anjuna Beach, and Vagator Beach. Experience Goa\'s active nightlife.', images: ['https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?auto=format&fit=crop&w=600&q=80', 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?auto=format&fit=crop&w=600&q=80'] },
+      { day: 3, title: 'South Goa Culture & Cruise', description: 'Visit Basilica of Bom Jesus, Se Cathedral, Mangueshi Temple, and Miramar Beach. End the day with a Mandovi River boat cruise.', images: ['https://images.unsplash.com/photo-1544551763-46a013bb70d5?auto=format&fit=crop&w=600&q=80'] },
+      { day: 4, title: 'Departure', description: 'Spend some time shopping for local spices and handicrafts. Transfer to airport/station for departure.', images: ['https://images.unsplash.com/photo-1519046904884-53103b34b206?auto=format&fit=crop&w=600&q=80'] }
     ],
     included: ['3-star hotel accommodation', 'Daily breakfast', 'Airport/Station transfers', 'All sightseeing tours in private AC car', 'Sunset river cruise ticket'],
     excluded: ['Airfare / Train tickets', 'Lunch & dinner', 'Adventure water sports fees', 'Personal expenses']
