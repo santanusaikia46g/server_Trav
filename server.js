@@ -2,8 +2,6 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const supabase = require('./config/supabase');
-const seedDatabase = require('./scripts/seed');
-
 // Route files
 const adminRoutes = require('./routes/adminRoutes');
 const packageRoutes = require('./routes/packageRoutes');
@@ -11,11 +9,6 @@ const destinationRoutes = require('./routes/destinationRoutes');
 const inquiryRoutes = require('./routes/inquiryRoutes');
 const reviewRoutes = require('./routes/reviewRoutes');
 const activityRoutes = require('./routes/activityRoutes');
-
-// Auto-seed database if tables are empty
-seedDatabase({ autoOnly: true }).catch(err => {
-  console.error('Auto-seed check failed:', err.message);
-});
 
 const app = express();
 
