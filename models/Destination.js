@@ -88,17 +88,27 @@ const Destination = {
   },
 
   async findByIdAndDelete(id) {
-    const { data, error } = await supabase
+    let existing = await this.findById(id);
+    if (!existing) {
+      const { data } = await supabase
+        .from('destinations')
+        .select('*')
+        .or(`id.eq.${id},name.eq.${id}`)
+        .maybeSingle();
+      if (data) existing = mapDestination(data);
+    }
+
+    if (!existing) return null;
+
+    const { error } = await supabase
       .from('destinations')
       .delete()
-      .eq('id', id)
-      .select()
-      .maybeSingle();
+      .or(`id.eq.${existing.id},name.eq.${existing.name}`);
 
     if (error) {
       throw new Error(error.message);
     }
-    return mapDestination(data);
+    return existing;
   },
 
   async count() {

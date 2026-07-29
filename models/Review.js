@@ -71,17 +71,18 @@ const Review = {
   },
 
   async findByIdAndDelete(id) {
-    const { data, error } = await supabase
+    const { data: existingData } = await supabase.from('reviews').select('*').eq('id', id).maybeSingle();
+    const existing = existingData ? mapReview(existingData) : null;
+
+    const { error } = await supabase
       .from('reviews')
       .delete()
-      .eq('id', id)
-      .select()
-      .maybeSingle();
+      .eq('id', id);
 
     if (error) {
       throw new Error(error.message);
     }
-    return mapReview(data);
+    return existing || { id, _id: id };
   }
 };
 

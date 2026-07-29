@@ -96,17 +96,18 @@ const Inquiry = {
   },
 
   async findByIdAndDelete(id) {
-    const { data, error } = await supabase
+    const { data: existingData } = await supabase.from('inquiries').select('*').eq('id', id).maybeSingle();
+    const existing = existingData ? mapInquiry(existingData) : null;
+
+    const { error } = await supabase
       .from('inquiries')
       .delete()
-      .eq('id', id)
-      .select()
-      .maybeSingle();
+      .eq('id', id);
 
     if (error) {
       throw new Error(error.message);
     }
-    return mapInquiry(data);
+    return existing || { id, _id: id };
   },
 
   async count() {

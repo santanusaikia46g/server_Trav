@@ -121,17 +121,23 @@ const Package = {
   },
 
   async findByIdAndDelete(id) {
-    const { data, error } = await supabase
+    let existing = await this.findById(id);
+    if (!existing) {
+      const { data } = await supabase.from('packages').select('*').eq('id', id).maybeSingle();
+      if (data) existing = mapPackage(data);
+    }
+
+    if (!existing) return null;
+
+    const { error } = await supabase
       .from('packages')
       .delete()
-      .eq('id', id)
-      .select()
-      .maybeSingle();
+      .eq('id', existing.id);
 
     if (error) {
       throw new Error(error.message);
     }
-    return mapPackage(data);
+    return existing;
   },
 
   async count() {
