@@ -6,8 +6,13 @@ const mapPackage = (data) => {
     ...data,
     _id: data.id,
     price: Number(data.price),
+    standard: data.standard || (data.price ? `₹${Number(data.price).toLocaleString('en-IN')}` : ''),
+    deluxe: data.deluxe || '—',
+    luxury: data.luxury || '—',
+    image: data.image || (Array.isArray(data.images) && data.images[0]) || '',
     category: data.category || 'Standard',
-    images: Array.isArray(data.images) ? data.images : [],
+    highlights: Array.isArray(data.highlights) ? data.highlights : [],
+    images: Array.isArray(data.images) ? data.images : (data.image ? [data.image] : []),
     itinerary: Array.isArray(data.itinerary) ? data.itinerary : [],
     included: Array.isArray(data.included) ? data.included : [],
     excluded: Array.isArray(data.excluded) ? data.excluded : []
@@ -65,19 +70,43 @@ const Package = {
   },
 
   async create(packageData) {
-    const { title, description, price, duration, destination, category, images, itinerary, included, excluded } = packageData;
+    const {
+      title,
+      description,
+      price,
+      standard,
+      deluxe,
+      luxury,
+      duration,
+      destination,
+      category,
+      image,
+      images,
+      highlights,
+      itinerary,
+      included,
+      excluded
+    } = packageData;
+
+    const formattedPrice = Number(price);
 
     const insertObj = {
       title,
       description,
-      price: Number(price),
+      price: formattedPrice,
+      standard: standard || (formattedPrice ? `₹${formattedPrice.toLocaleString('en-IN')}` : ''),
+      deluxe: deluxe || '—',
+      luxury: luxury || '—',
       duration,
       destination,
-      images: images || [],
+      image: image || (images && images[0]) || '',
+      images: images || (image ? [image] : []),
+      highlights: highlights || [],
       itinerary: itinerary || [],
       included: included || [],
       excluded: excluded || []
     };
+
     if (category) {
       insertObj.category = category;
     }
@@ -99,10 +128,18 @@ const Package = {
     if (updateData.title !== undefined) payload.title = updateData.title;
     if (updateData.description !== undefined) payload.description = updateData.description;
     if (updateData.price !== undefined) payload.price = Number(updateData.price);
+    if (updateData.standard !== undefined) payload.standard = updateData.standard;
+    if (updateData.deluxe !== undefined) payload.deluxe = updateData.deluxe;
+    if (updateData.luxury !== undefined) payload.luxury = updateData.luxury;
     if (updateData.duration !== undefined) payload.duration = updateData.duration;
     if (updateData.destination !== undefined) payload.destination = updateData.destination;
     if (updateData.category !== undefined) payload.category = updateData.category;
+    if (updateData.image !== undefined) {
+      payload.image = updateData.image;
+      payload.images = [updateData.image];
+    }
     if (updateData.images !== undefined) payload.images = updateData.images;
+    if (updateData.highlights !== undefined) payload.highlights = updateData.highlights;
     if (updateData.itinerary !== undefined) payload.itinerary = updateData.itinerary;
     if (updateData.included !== undefined) payload.included = updateData.included;
     if (updateData.excluded !== undefined) payload.excluded = updateData.excluded;
