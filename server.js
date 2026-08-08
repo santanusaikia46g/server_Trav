@@ -51,11 +51,27 @@ app.use((err, req, res, next) => {
   });
 });
 
+const seedDefaultAdmin = async () => {
+  try {
+    const bcrypt = require('bcryptjs');
+    const { data: existing } = await supabase.from('admins').select('*').eq('username', 'admin').maybeSingle();
+    if (!existing) {
+      const salt = await bcrypt.genSalt(10);
+      const hashedPassword = await bcrypt.hash('admin123', salt);
+      await supabase.from('admins').insert([{ username: 'admin', password: hashedPassword }]);
+      console.log('Default admin user initialized (username: admin, password: admin123)');
+    }
+  } catch (err) {
+    console.error('Error seeding default admin:', err.message);
+  }
+};
+
 const rawPort = process.env.PORT;
 const parsedPort = parseInt(rawPort, 10);
 const PORT = (!isNaN(parsedPort) && parsedPort > 0) ? parsedPort : 5000;
 
-app.listen(PORT, () => {
+app.listen(PORT, async () => {
   console.log(`Server running in ${process.env.NODE_ENV || 'development'} mode on port ${PORT}`);
+  await seedDefaultAdmin();
 });
 

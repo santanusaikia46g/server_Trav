@@ -1,11 +1,10 @@
 const express = require('express');
 const router = express.Router();
-const ActivityLog = require('../models/ActivityLog');
-const verifyToken = require('../middleware/authMiddleware');
+const { protect } = require('../middleware/auth');
 
 // @route   GET /api/activity
 // @desc    Get activity logs (Admin protected)
-router.get('/', verifyToken, async (req, res) => {
+router.get('/', protect, async (req, res) => {
   try {
     const logs = await ActivityLog.find(30);
     res.json(logs);

@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Review = require('../models/Review');
-const verifyToken = require('../middleware/authMiddleware');
+const { protect } = require('../middleware/auth');
 
 // @route   GET /api/reviews
 // @desc    Get all reviews (public get approved, admin gets all)
@@ -42,7 +42,7 @@ router.post('/', async (req, res) => {
 
 // @route   PUT /api/reviews/:id
 // @desc    Moderate/Update review (Admin protected)
-router.put('/:id', verifyToken, async (req, res) => {
+router.put('/:id', protect, async (req, res) => {
   try {
     const review = await Review.findByIdAndUpdate(req.params.id, req.body);
     if (!review) {
@@ -57,7 +57,7 @@ router.put('/:id', verifyToken, async (req, res) => {
 
 // @route   DELETE /api/reviews/:id
 // @desc    Delete review (Admin protected)
-router.delete('/:id', verifyToken, async (req, res) => {
+router.delete('/:id', protect, async (req, res) => {
   try {
     const review = await Review.findByIdAndDelete(req.params.id);
     if (!review) {
