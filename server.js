@@ -54,12 +54,24 @@ app.use((err, req, res, next) => {
 const seedDefaultAdmin = async () => {
   try {
     const bcrypt = require('bcryptjs');
-    const { data: existing } = await supabase.from('admins').select('*').eq('username', 'admin').maybeSingle();
+    const targetUsername = process.env.ADMIN_USERNAME || 'admin';
+    const targetPassword = process.env.ADMIN_PASSWORD || 'adminpassword';
+
+    const { data: existing } = await supabase.from('admins').select('*').eq('username', targetUsername).maybeSingle();
+
     if (!existing) {
       const salt = await bcrypt.genSalt(10);
-      const hashedPassword = await bcrypt.hash('admin123', salt);
-      await supabase.from('admins').insert([{ username: 'admin', password: hashedPassword }]);
-      console.log('Default admin user initialized (username: admin, password: admin123)');
+      const hashedPassword = await bcrypt.hash(targetPassword, salt);
+      await supabase.from('admins').insert([{ username: targetUsername, password: hashedPassword }]);
+      console.log(`Default admin user initialized (username: ${targetUsername})`);
+    } else {
+      const matches = await bcrypt.compare(targetPassword, existing.password);
+      if (!matches) {
+        const salt = await bcrypt.genSalt(10);
+        const hashedPassword = await bcrypt.hash(targetPassword, salt);
+        await supabase.from('admins').update({ password: hashedPassword }).eq('id', existing.id);
+        console.log(`Admin password updated to match .env settings for user: ${targetUsername}`);
+      }
     }
   } catch (err) {
     console.error('Error seeding default admin:', err.message);
